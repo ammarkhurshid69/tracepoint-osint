@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tracepoint: OSINT desk</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark">Tracepoint</span><span class="tag">open-source intelligence desk</span></div>
+  <nav id="tabs">
+    <button data-tab="cases" class="on">Cases</button>
+    <button data-tab="alerts">Alerts <span id="alertBadge" class="badge" hidden>0</span></button>
+    <button data-tab="sources">Sources</button>
+  </nav>
+  <button id="keyBtn" class="ghost" title="Only needed if APP_API_KEY is set on the server">API key</button>
+</header>
+
+<section class="search">
+  <form id="searchForm" autocomplete="off">
+    <label for="target" class="sr">Target</label>
+    <input id="target" name="target" placeholder="Search a domain, IP, URL, e-mail, username or file hash" spellcheck="false" autofocus>
+    <select id="type" aria-label="Target type">
+      <option value="auto">Auto-detect</option><option value="domain">Domain</option><option value="ip">IP address</option>
+      <option value="url">URL</option><option value="email">E-mail</option><option value="username">Username</option><option value="hash">File hash</option>
+    </select>
+    <button type="submit" id="goBtn">Investigate</button>
+  </form>
+  <div class="opts">
+    <span id="detected" class="hint">Type or paste something. The kind is detected automatically.</span>
+    <label><input type="checkbox" id="optMon"> Re-check every 15 min</label>
+    <label><input type="checkbox" id="optKeyed" checked> Use my API keys where configured</label>
+  </div>
+  <p id="formMsg" role="alert" class="msg" hidden></p>
+</section>
+
+<main>
+  <div id="view-cases">
+    <div id="stats" class="stats"></div>
+    <div class="split">
+      <aside>
+        <div class="listhead"><h2>History</h2><input id="filter" placeholder="filter" aria-label="Filter history"></div>
+        <ul id="list" class="list"></ul>
+      </aside>
+      <article id="detail" class="detail"></article>
+    </div>
+  </div>
+  <div id="view-alerts" hidden>
+    <div class="listhead"><h2>Alerts</h2><button id="readAll" class="ghost">Mark all read</button></div>
+    <p class="hint">Alerts are raised when a re-check of a case finds something new, something disappears, or the risk level changes.</p>
+    <ul id="alertList" class="alerts"></ul>
+  </div>
+  <div id="view-sources" hidden>
+    <h2>Data sources</h2>
+    <p class="hint">Sources marked <b>ready</b> work with no account. Sources that need a key stay switched off until you put your own key in <code>.env</code> and restart. "Key present" does not prove the key is valid.</p>
+    <table class="tbl" id="srcTable"></table>
+    <h2>Monitoring</h2>
+    <div id="monInfo" class="hint"></div>
+  </div>
+</main>
+
+<footer>Student project. Results come from public third-party sources and can be incomplete or wrong. The risk score is a heuristic, not a verdict. Investigate only things you are allowed to.</footer>
+
+<dialog id="keyDlg">
+  <form method="dialog" id="keyForm">
+    <h3>Server API key</h3>
+    <p class="hint">Stored only for this browser tab (session storage). This is the <code>APP_API_KEY</code> from your .env file, not a provider key.</p>
+    <input id="keyInput" type="password" autocomplete="off" placeholder="APP_API_KEY">
+    <div class="row"><button value="cancel" class="ghost">Cancel</button><button value="ok" id="keySave">Save</button></div>
+  </form>
+</dialog>
+<script src="/static/app.js"></script>
+</body>
+</html>
